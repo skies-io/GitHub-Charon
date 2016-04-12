@@ -1,13 +1,18 @@
 from threading import Lock
-import shelve
 from contextlib import contextmanager
+import json
 
 @contextmanager
 def database():
     data = dict()
     mutex = Lock()
     mutex.acquire()
-    db = shelve.open("database.shelve")
+    db = dict()
+    try:
+        with open("database.json", "r") as f:
+            db = json.load(f)
+    except:
+        pass
     if "baseurl" not in db:
         db["baseurl"] = ""
     if "admins" not in db:
@@ -19,14 +24,12 @@ def database():
     if "projects" not in db:
         db["projects"] = dict()
     yield db
-    print("close db", dict(db))
-    db.close()
+    with open("database.json", "w") as f:
+        json.dump(db, f)
     mutex.release()
 
 def get_database():
-    data = dict()
-    fields = ["baseurl", "admins", "oauth_client_id", "oauth_client_secret", "projects"]
+    data = None
     with database() as db:
-        for field in fields:
-            data[field] = db[field]
+        data = dict(db)
     return data

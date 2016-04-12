@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-5">
+        <table class="table table-hover">
+            <thead><tr><th>Information</th><th>Value</th></tr></thead>
+            <tbody>
+                <tr><th>Reference</th><td><a href="{{ pr.github_link }}" class="btn btn-xs btn-primary">Open GitHub #{{ pr.number }}</a></td></tr>
+                <tr><th>Title</th><td>{{ pr.title }}</td></tr>
+                <tr><th>PR State</th><td>
+                    {% if pr.state == "open" %}
+                    <span class="label label-success">{{ pr.state }}</span>
+                    {% elif pr.state == "closed" %}
+                    <span class="label label-danger">{{ pr.state }}</span>
+                    {% else %}
+                    <span class="label label-info">{{ pr.state }}</span>
+                    {% endif %}
+                </td></tr>
+                <tr><th>Validation State</th><td>
+                    {% if pr.state_validation == "forced" %}
+                    <span class="label label-warning">{{ pr.state_validation }}</span>
+                    {% elif pr.state_validation == "refused" %}
+                    <span class="label label-danger">{{ pr.state_validation }}</span>
+                    {% elif pr.state_validation == "accepted" %}
+                    <span class="label label-success">{{ pr.state_validation }}</span>
+                    {% else %}
+                    <span class="label label-info">{{ pr.state_validation }}</span>
+                    {% endif %}
+                </td></tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-7">
+        <table class="table table-hover">
+            <thead><tr><th>Administrator</th><th>Validation State</th><th>Message</th></tr></thead>
+            <tbody>
+                {% for admin in project_admins %}
+                <tr>
+                    <th>{{ admin }}</th>
+                    {% if admin in pr.validations %}
+                    <td>
+                        {% if pr.validations[admin].force %}
+                        <span class="label label-warning">forced</span>
+                        {% elif pr.validations[admin].accept %}
+                        <span class="label label-success">accepted</span>
+                        {% else %}
+                        <span class="label label-danger">refused</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ pr.validations[admin].message }}</td>
+                    {% else %}
+                    <td><span class="label label-info">pending</span></td>
+                    <td></td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<hr/>
+
+<form class="form-horizontal" method="post">
+    <h3>Your Validation</h3>
+
+    {% if error_validation %}<p class="bg-danger"><b>{{ error_validation }}</b></p>{% endif %}
+
+    <div class="form-group">
+        <label for="inputMessage" class="col-sm-3 control-label">Message (optional)</label>
+        <div class="col-sm-9">
+            <input type="text" class="form-control" id="inputMessage" name="message" placeholder="OK">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-9">
+            <button type="submit" name="accept" class="btn btn-success">Validate the Pull Request</button>
+            <button type="submit" name="refuse" class="btn btn-danger">Refuse the Pull Request</button>
+            <button type="submit" name="force" class="btn btn-warning">Force validation</button>
+        </div>
+    </div>
+</form>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<table class="table table-hover">
+    <thead><tr><th>Project name</th><th>Administrators</th><th>Open</th></tr></thead>
+    <tbody>
+        {% for project in my_projects %}
+        <tr>
+            <td><b>{{ project.name }}</b></td>
+            <td>{{ project.administrators_list }}</td>
+            <td><a href="{{ project.link }}" class="btn btn-sm btn-info">List of Pull Requests</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

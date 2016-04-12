@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<table class="table table-hover">
+    <thead><tr><th>#</th><th>PR State</th><th>Title</th><th>Validation state</th><th>Open</th></tr></thead>
+    <tbody>
+        {% for pull_request in pr %}
+        {% if pull_request.state_validation == "forced" %}
+        <tr class="warning">
+        {% elif pull_request.state_validation == "refused" %}
+        <tr class="danger">
+        {% elif pull_request.state_validation == "accepted" %}
+        <tr class="success">
+        {% else %}
+        <tr class="warning">
+        {% endif %}
+            <td><a href="{{ pull_request.github_link }}">#{{ pull_request.number }}</a></td>
+            <td>
+                {% if pull_request.state == "open" %}
+                <span class="label label-success">{{ pull_request.state }}</span>
+                {% elif pull_request.state == "closed" %}
+                <span class="label label-danger">{{ pull_request.state }}</span>
+                {% else %}
+                <span class="label label-info">{{ pull_request.state }}</span>
+                {% endif %}
+            </td>
+            <td>{{ pull_request.title }}</td>
+            <td>
+                {% if pull_request.state_validation == "forced" %}
+                <span class="label label-warning">{{ pull_request.state_validation }}</span>
+                {% elif pull_request.state_validation == "refused" %}
+                <span class="label label-danger">{{ pull_request.state_validation }}</span>
+                {% elif pull_request.state_validation == "accepted" %}
+                <span class="label label-success">{{ pull_request.state_validation }}</span>
+                {% else %}
+                <span class="label label-info">{{ pull_request.state_validation }}</span>
+                {% endif %}
+            </td>
+            <td><a href="{{ pull_request.link }}" class="btn btn-sm btn-primary">Open validation</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

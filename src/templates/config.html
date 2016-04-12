@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form class="form-horizontal" method="post">
+    <h3>GitHub Application</h3>
+
+    <p class="bg-info">Create a new GitHub application <a href="https://github.com/settings/applications/new">here</a>.</p>
+
+    <div class="form-group">
+        <label for="inputOAuthClientID" class="col-sm-3 control-label">OAuth Client ID</label>
+        <div class="col-sm-9">
+            <input type="text" class="form-control" id="inputOAuthClientID" name="oauth_client_id" value="{{ oauth_client_id }}" placeholder="OAuth Client ID">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="inputOAuthClientSecret" class="col-sm-3 control-label">OAuth Client Secret</label>
+        <div class="col-sm-9">
+            <input type="text" class="form-control" id="inputOAuthClientSecret" name="oauth_client_secret" value="{{ oauth_client_secret }}" placeholder="OAuth Client Secret">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="inputCallback" class="col-sm-3 control-label">Authorization Callback</label>
+        <div class="col-sm-9">
+            <input type="text" class="form-control" id="inputCallback" value="{{ baseurl }}/callback/oauth" readonly="readonly">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-9">
+            <button type="submit" name="configs" class="btn btn-success">Save</button>
+        </div>
+    </div>
+</form>
+
+<hr/>
+
+<form class="form-horizontal" method="post">
+    <h3>General</h3>
+
+    <p class="bg-info">Base URL (protocol + hostname), and list of the administrators (one line per GitHub Username).</p>
+
+    <div class="form-group">
+        <label for="inputBaseurl" class="col-sm-3 control-label">Base URL</label>
+        <div class="col-sm-9">
+            <input type="text" class="form-control" id="inputCallback" name="baseurl" value="{{ baseurl }}" placeholder="http://sub.domain.com">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="inputAdministrators" class="col-sm-3 control-label">Administrators</label>
+        <div class="col-sm-9">
+            <textarea class="form-control" id="inputAdministrators" name="administrators" rows="5">{{ administrators }}</textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-9">
+            <button type="submit" name="general" class="btn btn-success">Save</button>
+        </div>
+    </div>
+</form>
+
+<hr/>
+
+{% for project in projects %}
+<form class="form-horizontal" method="post">
+    <h3>Project {{ projects[project].name }}</h3>
+
+    <p class="bg-info">Add a hook (with the event "Pull Request") to this repository.</p>
+
+    <div class="form-group">
+        <label for="inputPayloadURL" class="col-sm-3 control-label">Payload URL</label>
+        <div class="col-sm-9">
+            <input type="text" class="form-control" id="inputPayloadURL" value="{{ baseurl }}/callback/hook" readonly="readonly">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="inputSecret" class="col-sm-3 control-label">Hook Secret</label>
+        <div class="col-sm-9">
+            <input type="text" class="form-control" id="inputSecret" value="{{ projects[project].secret }}" readonly="readonly">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="inputOAuthToken" class="col-sm-3 control-label">OAuth Token</label>
+        <div class="col-sm-9">
+            <input type="text" class="form-control" id="inputOAuthToken" value="{{ projects[project].oauth_token }}" readonly="readonly">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="inputAdministratorsProject" class="col-sm-3 control-label">Administrators list</label>
+        <div class="col-sm-9">
+            <textarea class="form-control" id="inputAdministratorsProject" name="administrators" rows="5">{{ projects[project].administrators }}</textarea>
+        </div>
+    </div>
+
+    <input type="hidden" name="project" value="{{ projects[project].name }}">
+
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-9">
+            <button type="submit" name="save_project" class="btn btn-success">Save</button>
+            <button type="submit" name="update_project_oauth" class="btn btn-warning">Update OAuth Token</button>
+            <button type="submit" name="remove_project" class="btn btn-danger">Remove {{ projects[project].name }}</button>
+        </div>
+    </div>
+</form>
+{% endfor %}
+
+<hr/>
+
+<form class="form-horizontal" method="post">
+    <h3>Add project</h3>
+
+    <p class="bg-info">GitHub repository name (with username) + list of the administrators (one line per GitHub Username).</p>
+
+    <div class="form-group">
+        <label for="inputRepository" class="col-sm-3 control-label">Repository</label>
+        <div class="col-sm-9">
+            <input type="text" class="form-control" id="inputRepository" name="repository" placeholder="username/repository">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="inputAdministratorsAdd" class="col-sm-3 control-label">Administrators</label>
+        <div class="col-sm-9">
+            <textarea class="form-control" id="inputAdministratorsAdd" name="administrators" rows="5">{{ administrators }}</textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-9">
+            <button type="submit" name="add" class="btn btn-success">Add</button>
+        </div>
+    </div>
+</form>
+{% endblock %}

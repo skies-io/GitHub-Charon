@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+    <meta name="robots" content="none">
+
+    <title>GitHub Pull Request Validation</title>
+
+    <link rel="stylesheet" href="/static/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/bootstrap-theme.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css" />
+    <script src="/static/jquery-1.12.0.min.js"></script>
+    <script src="/static/bootstrap.min.js"></script>
+
+    <link rel="icon" href="/static/favicon.png" type="image/png">
+
+    <!--[if ie]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+    <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+</head>
+<body>
+    <div class="container">
+        <header class="row">
+            <div class="col-md-3 text-center">
+                <br/><br/>
+                <img src="/static/favicon.png"/><br/>
+                <small><a href="https://github.com/skies-io/GitHub-Charon">skies-io/GitHub-Charon</a></small>
+            </div>
+            <div class="col-md-9">
+                <h4><small>GitHub Charon - Pull Request Validation Tool</small></h4>
+                <h2>{{ title }}</h2>
+                <hr/>
+            </div>
+        </header>
+
+        <div class="row">
+
+            <div class="col-md-3">
+                <h5><small>General</small></h5>
+                <ul class="nav nav-pills nav-stacked">
+                    <li><a href="/">Home</a></li>
+                    {% if is_admin %}<li><a href="/configs">Configurations</a></li>{% endif %}
+                </ul>
+                <h5><small>Projects</small></h5>
+                <ul class="nav nav-pills nav-stacked">
+                    {% for project in my_projects %}
+                    <li><a href="{{ project.link }}">{{ project.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="col-md-9">
+                {% block content %}{% endblock %}
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

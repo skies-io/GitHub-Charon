@@ -1,0 +1,7 @@
+body { font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif; background: #F7F7F7; }
+h4 small, h5 small { font-size: 85%; text-transform: uppercase; letter-spacing: 1px; color: #aeaeae; }
+h2 { margin: 0; letter-spacing: 0; font-weight: 300; font-size: 30px; }
+header.row { margin-top: 20px; margin-bottom: 20px; }
+p { padding: 15px; }
+.h1, .h2, .h3, h1, h2, h3 { margin-top: 30px; margin-bottom: 20px; }
+.table tbody > tr > td { vertical-align: middle; }

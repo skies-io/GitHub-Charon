@@ -25,7 +25,7 @@ def callback_hook():
         project = db["projects"][repository_name]
         if not verify_hmac_hash(project["secret"], request.data, request.headers.get("X-Hub-Signature")):
             return '{"message": "Bad signature"}', 403
-        pr_number = data["pull_request"]["number"]
+        pr_number = str(data["pull_request"]["number"])
         pr_state = data["pull_request"]["state"]
         pr_title = data["pull_request"]["title"]
         pr_link = data["pull_request"]["html_url"]
@@ -54,7 +54,8 @@ def callback_hook():
             project = projects[repository_name]
             db["projects"] = projects
         if create_status:
-            set_status(db["baseurl"], project, pr_number)
+            if not set_status(db["baseurl"], project, pr_number):
+                return '{"mesasge": "Impossible to set status on GitHub"}', 400
         return '{"message": "Success"}'
 
     return '{"message": "Unknown event"}', 400

@@ -9,6 +9,8 @@ from app_project import app_project
 
 app = Flask(__name__)
 
+app.debug = True
+
 app.secret_key = os.urandom(24)
 
 app.register_blueprint(app_configs)

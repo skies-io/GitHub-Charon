@@ -53,7 +53,7 @@ def home():
 
         return render_template("project.html", **view)
 
-    pr_number = int(request.args["pr"])
+    pr_number = request.args["pr"]
     if pr_number not in project["pr"]:
         return generate_error("Pull request not found", view=view)
 
@@ -71,9 +71,10 @@ def home():
                 projects[request.args["project"]]["pr"][pr_number]["validations"][view["login"]] = validation
                 project["pr"][pr_number]["validations"][view["login"]] = validation
                 db["projects"] = projects
-            set_status(view["baseurl"], project, pr_number)
+            if not set_status(view["baseurl"], project, pr_number):
+                view["error_validation"] = "Impossible to set status on GitHub."
 
-    view["title"] += ", Pull Request #" + str(pr_number)
+    view["title"] += ", Pull Request #" + pr_number
     view["pr"] = get_view_info_pr(project["name"], project["pr"][pr_number])
     view["project_admins"] = project["administrators"]
 

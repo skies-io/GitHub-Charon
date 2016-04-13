@@ -57,4 +57,4 @@ def set_status(baseurl, project, pr_number):
 
     response = requests.post(pr["statuses_url"], json=data, headers={"Authorization": "token " + project["oauth_token"]})
 
-    return response.status_code == requests.codes.ok
+    return response.status_code >= 200 and response.status_code < 300

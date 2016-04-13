@@ -24,13 +24,15 @@ def get_state_validation(validations, minimum_acceptances=2):
 def set_status(baseurl, project, pr_number):
     def general_message(admins, accepted=True):
         names = ""
-        if len(admins) == 1:
+        if len(admins) == 0:
+            names = "No one"
+        elif len(admins) == 1:
             names = admins[0]
         else:
             names = ", ".join(admins[:-1])
             names = " and ".join([names, admins[-1]])
         action = "accepted" if accepted else "refused"
-        return names + " " + action + " the Pull Request."
+        return names + " has " + action + " the Pull Request."
 
     pr = project["pr"][pr_number]
     state_validation, admins = get_state_validation(pr["validations"])

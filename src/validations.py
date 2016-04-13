@@ -2,7 +2,7 @@ from urllib.parse import urlencode
 import requests
 
 
-def get_state_validation(validations, minimum_acceptances=2):
+def get_state_validation(validations, minimum_acceptances=1):
     accepted = list()
     refused = list()
     forced = list()

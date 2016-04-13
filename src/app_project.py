@@ -49,7 +49,7 @@ def home():
         pr = list()
         for pr_number in project["pr"]:
             pr.append(get_view_info_pr(project["name"], project["pr"][pr_number]))
-        view["pr"] = sorted(pr, key=lambda elem: elem["number"])
+        view["pr"] = sorted(pr, key=lambda elem: elem["number"], reverse=True)
 
         return render_template("project.html", **view)
 

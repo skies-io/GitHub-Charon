@@ -74,7 +74,7 @@ def configs():
         if len(projects[project]["oauth_token"]) == 0:
             projects[project]["oauth_token"] = "NOT DEFINED!"
 
-    view["configurations"] = json.loads(db)
+    view["configurations"] = json.dumps(db)
     view["baseurl"] = db["baseurl"]
     view["oauth_client_id"] = db["oauth_client_id"]
     view["oauth_client_secret"] = db["oauth_client_secret"]

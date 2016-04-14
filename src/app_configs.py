@@ -56,9 +56,10 @@ def configs():
         try:
             data = json.loads(request.form["configurations"])
             with database() as db:
-                db = data
-        except:
-            pass
+                for field in data:
+                    db[field] = data[field]
+        except Exception as e:
+            return generate_error("Error configurations: " + str(e))
 
     db, view = get_general_variables("Configurations")
 

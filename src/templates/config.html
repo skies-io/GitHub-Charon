@@ -137,4 +137,25 @@
         </div>
     </div>
 </form>
+
+<hr/>
+
+<form class="form-horizontal" method="post">
+    <h3>JSON Configurations</h3>
+
+    <p class="bg-info">Export/Import the configurations of the interface.</p>
+
+    <div class="form-group">
+        <label for="inputConfigurations" class="col-sm-3 control-label">JSON Configurations</label>
+        <div class="col-sm-9">
+            <textarea class="form-control" id="inputConfigurations" name="configurations" rows="5">{{ configurations }}</textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-9">
+            <button type="submit" name="config_replace" class="btn btn-warning">Replace</button>
+        </div>
+    </div>
+</form>
 {% endblock %}

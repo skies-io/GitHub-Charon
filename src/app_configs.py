@@ -3,6 +3,7 @@ from database import database, get_database
 import oauth
 import random
 import string
+import json
 from page_tools import get_general_variables, generate_error
 
 
@@ -51,6 +52,14 @@ def configs():
             db["projects"] = projects
         return redirect(oauth.get_url_authentification("repo:status"))
 
+    elif "config_replace" in request.form and "configurations" in request.form:
+        try:
+            data = json.dumps(request.form["configurations"])
+            with database() as db:
+                db = data
+        except:
+            pass
+
     db, view = get_general_variables("Configurations")
 
     if len(db["admins"]) > 0 and not oauth.is_connected():
@@ -65,6 +74,7 @@ def configs():
         if len(projects[project]["oauth_token"]) == 0:
             projects[project]["oauth_token"] = "NOT DEFINED!"
 
+    view["configurations"] = json.loads(db)
     view["baseurl"] = db["baseurl"]
     view["oauth_client_id"] = db["oauth_client_id"]
     view["oauth_client_secret"] = db["oauth_client_secret"]

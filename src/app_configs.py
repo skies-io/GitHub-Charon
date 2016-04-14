@@ -53,6 +53,9 @@ def configs():
 
     db, view = get_general_variables("Configurations")
 
+    if len(db["admins"]) > 0 and not oauth.is_connected():
+        return redirect(oauth.get_url_authentification("repo:status"))
+
     if len(db["admins"]) > 0 and ("login" not in session or session["login"] not in db["admins"]):
         return generate_error("Access Forbidden")
 

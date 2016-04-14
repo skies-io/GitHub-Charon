@@ -30,7 +30,7 @@ def home():
         return redirect(url_for("app_configs.configs"))
 
     if not oauth.is_connected():
-        return redirect(oauth.get_url_authentification())
+        return redirect(oauth.get_url_authentification("repo:status"))
 
     if "project" not in request.args:
         return render_template("main.html", **view)

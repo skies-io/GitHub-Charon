@@ -54,7 +54,7 @@ def configs():
 
     elif "config_replace" in request.form and "configurations" in request.form:
         try:
-            data = json.dumps(request.form["configurations"])
+            data = json.loads(request.form["configurations"])
             with database() as db:
                 db = data
         except:

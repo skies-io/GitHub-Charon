@@ -24,8 +24,8 @@ def get_general_variables(title):
     }
     return db, view
 
-def generate_error(message, view=None):
+def generate_error(message, view=None, code=400):
     if not view:
         _, view = get_general_variables("Error")
     view["error"] = message
-    return render_template("error.html", **view), 400
+    return render_template("error.html", **view), code

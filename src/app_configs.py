@@ -69,13 +69,14 @@ def configs():
     if len(db["admins"]) > 0 and ("login" not in session or session["login"] not in db["admins"]):
         return generate_error("Access Forbidden")
 
+    view["configurations"] = json.dumps(db)
+
     projects = db["projects"]
     for project in projects:
         projects[project]["administrators"] = "\n".join(projects[project]["administrators"] if "administrators" in projects[project] else list())
         if len(projects[project]["oauth_token"]) == 0:
             projects[project]["oauth_token"] = "NOT DEFINED!"
 
-    view["configurations"] = json.dumps(db)
     view["baseurl"] = db["baseurl"]
     view["oauth_client_id"] = db["oauth_client_id"]
     view["oauth_client_secret"] = db["oauth_client_secret"]

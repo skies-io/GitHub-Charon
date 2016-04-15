@@ -7,11 +7,11 @@ def get_state_validation(validations, minimum_acceptances=1):
     refused = list()
     forced = list()
     for admin in validations:
-        if validations[admin]["force"] == True:
+        if validations[admin]["action"] == "forced":
             forced.append(admin)
-        elif validations[admin]["accept"] == True:
+        elif validations[admin]["action"] == "accepted":
             accepted.append(admin)
-        else:
+        elif validations[admin]["action"] == "refused":
             refused.append(admin)
     if len(forced) > 0:
         return "forced", forced

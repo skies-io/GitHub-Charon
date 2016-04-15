@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, request
+from flask import Blueprint, render_template, redirect, url_for, request, session
 import oauth
 from database import database
 from urllib.parse import urlencode
@@ -11,6 +11,9 @@ app_project = Blueprint('app_project', __name__)
 
 def get_view_info_pr(project_name, pull_request):
     state_validation, _ = get_state_validation(pull_request["validations"])
+    user_validation = None
+    if "login" in session and session["login"] in pull_request["validations"]:
+        user_validation = pull_request["validations"][session["login"]]["action"]
     return {
         "number": int(pull_request["number"]),
         "state": pull_request["state"],
@@ -18,6 +21,7 @@ def get_view_info_pr(project_name, pull_request):
         "github_link": pull_request["link"],
         "link": "/?" + urlencode({"project": project_name, "pr": pull_request["number"]}),
         "state_validation": state_validation,
+        "user_validation": user_validation,
         "validations": pull_request["validations"]
     }
 
@@ -41,7 +45,7 @@ def home():
     project = db["projects"][request.args["project"]]
 
     if view["login"] not in project["administrators"]:
-        return generate_error("Access Forbidden", view=view), 403
+        return generate_error("Access Forbidden", view=view, code=403)
 
     view["title"] = "Project " + project["name"]
 
@@ -58,12 +62,20 @@ def home():
         return generate_error("Pull request not found", view=view)
 
     if "message" in request.form:
-        if project["pr"][pr_number]["state"] != "open":
+        if project["pr"][pr_number]["state"] != "open" and "acknowledge" not in request.form:
             view["error_validation"] = "Pull request already closed."
-        elif "accept" in request.form or "force" in request.form or "refuse" in request.form:
+        elif "accept" in request.form or "force" in request.form or "refuse" in request.form or "acknowledge" in request.form:
+            action = "unknown"
+            if "accept" in request.form:
+                action = "accepted"
+            elif "force" in request.form:
+                action = "forced"
+            elif "refuse" in request.form:
+                action = "refused"
+            elif "acknowledge" in request.form:
+                action = "acknowledged"
             validation = {
-                "accept": "accept" in request.form,
-                "force": "force" in request.form,
+                "action": action,
                 "message": request.form["message"]
             }
             with database() as db:

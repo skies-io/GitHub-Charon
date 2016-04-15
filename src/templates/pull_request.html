@@ -33,25 +33,28 @@
     </div>
     <div class="col-md-7">
         <table class="table table-hover">
-            <thead><tr><th>Administrator</th><th>Validation State</th><th>Message</th></tr></thead>
+            <thead><tr><th>Administrator</th><th>Validation</th></tr></thead>
             <tbody>
                 {% for admin in project_admins %}
                 <tr>
                     <th>{{ admin }}</th>
                     {% if admin in pr.validations %}
                     <td>
-                        {% if pr.validations[admin].force %}
-                        <span class="label label-warning">forced</span>
-                        {% elif pr.validations[admin].accept %}
-                        <span class="label label-success">accepted</span>
+                        {% if pr.validations[admin].action == "forced" %}
+                        <span class="label label-warning">{{ pr.validations[admin].action }}</span>
+                        {% elif pr.validations[admin].action == "accepted" %}
+                        <span class="label label-success">{{ pr.validations[admin].action }}</span>
+                        {% elif pr.validations[admin].action == "refused" %}
+                        <span class="label label-danger">{{ pr.validations[admin].action }}</span>
+                        {% elif pr.validations[admin].action == "acknowledged" %}
+                        <span class="label label-primary">{{ pr.validations[admin].action }}</span>
                         {% else %}
-                        <span class="label label-danger">refused</span>
+                        <span class="label label-info">{{ pr.validations[admin].action }}</span>
                         {% endif %}
+                        {{ pr.validations[admin].message }}
                     </td>
-                    <td>{{ pr.validations[admin].message }}</td>
                     {% else %}
                     <td><span class="label label-info">pending</span></td>
-                    <td></td>
                     {% endif %}
                 </tr>
                 {% endfor %}
@@ -76,9 +79,10 @@
 
     <div class="form-group">
         <div class="col-sm-offset-3 col-sm-9">
-            <button type="submit" name="accept" class="btn btn-success">Validate the Pull Request</button>
-            <button type="submit" name="refuse" class="btn btn-danger">Refuse the Pull Request</button>
-            <button type="submit" name="force" class="btn btn-warning">Force validation</button>
+            <button type="submit" name="accept" class="btn btn-success"{% if pr.state != "open" %} disabled="disabled" title="Pull request already closed"{% endif %}>Validate the PR</button>
+            <button type="submit" name="refuse" class="btn btn-danger"{% if pr.state != "open" %} disabled="disabled" title="Pull request already closed"{% endif %}>Refuse the PR</button>
+            <button type="submit" name="force" class="btn btn-warning"{% if pr.state != "open" %} disabled="disabled" title="Pull request already closed"{% endif %}>Force validation</button>
+            <button type="submit" name="acknowledge" class="btn btn-primary">Acknowledge</button>
         </div>
     </div>
 </form>

@@ -2,20 +2,25 @@
 
 {% block content %}
 <table class="table table-hover">
-    <thead><tr><th>#</th><th>PR State</th><th>Title</th><th>Validation state</th><th>Open</th></tr></thead>
+    <thead>
+        <tr>
+            <th class="text-center">#</th>
+            <th class="text-center">PR State</th>
+            <th>Title</th>
+            <th class="text-center">Validation state</th>
+            <th class="text-center">Your validation</th>
+            <th class="text-center">Open</th>
+        </tr>
+    </thead>
     <tbody>
         {% for pull_request in pr %}
-        {% if pull_request.state_validation == "forced" %}
-        <tr class="warning">
-        {% elif pull_request.state_validation == "refused" %}
-        <tr class="danger">
-        {% elif pull_request.state_validation == "accepted" %}
+        {% if pull_request.user_validation %}
         <tr class="success">
         {% else %}
         <tr class="warning">
         {% endif %}
-            <td><a href="{{ pull_request.github_link }}">#{{ pull_request.number }}</a></td>
-            <td>
+            <td class="text-center"><a href="{{ pull_request.github_link }}">#{{ pull_request.number }}</a></td>
+            <td class="text-center">
                 {% if pull_request.state == "open" %}
                 <span class="label label-success">{{ pull_request.state }}</span>
                 {% elif pull_request.state == "closed" %}
@@ -25,7 +30,7 @@
                 {% endif %}
             </td>
             <td>{{ pull_request.title }}</td>
-            <td>
+            <td class="text-center">
                 {% if pull_request.state_validation == "forced" %}
                 <span class="label label-warning">{{ pull_request.state_validation }}</span>
                 {% elif pull_request.state_validation == "refused" %}
@@ -36,7 +41,20 @@
                 <span class="label label-info">{{ pull_request.state_validation }}</span>
                 {% endif %}
             </td>
-            <td><a href="{{ pull_request.link }}" class="btn btn-sm btn-primary">Open validation</a></td>
+            <td class="text-center">
+                {% if pull_request.user_validation == "forced" %}
+                <span class="label label-warning">{{ pull_request.user_validation }}</span>
+                {% elif pull_request.user_validation == "refused" %}
+                <span class="label label-danger">{{ pull_request.user_validation }}</span>
+                {% elif pull_request.user_validation == "accepted" %}
+                <span class="label label-success">{{ pull_request.user_validation }}</span>
+                {% elif pull_request.user_validation == "acknowledged" %}
+                <span class="label label-primary">{{ pull_request.user_validation }}</span>
+                {% else %}
+                <span class="label label-info">{% if pull_request.user_validation %}{{ pull_request.user_validation }}{% else %}pending{% endif %}</span>
+                {% endif %}
+            </td>
+            <td class="text-center"><a href="{{ pull_request.link }}" class="btn btn-sm btn-primary">Open validation</a></td>
         </tr>
         {% endfor %}
     </tbody>

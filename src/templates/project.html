@@ -19,7 +19,7 @@
         {% else %}
         <tr class="warning">
         {% endif %}
-            <td class="text-center"><a href="{{ pull_request.github_link }}">#{{ pull_request.number }}</a></td>
+            <td class="text-center"><a href="{{ pull_request.github_link }}" target="_blank">#{{ pull_request.number }}</a></td>
             <td class="text-center">
                 {% if pull_request.state == "open" %}
                 <span class="label label-success">{{ pull_request.state }}</span>

@@ -2,7 +2,7 @@ from urllib.parse import urlencode
 import requests
 
 
-def get_state_validation(validations, minimum_acceptances=1):
+def get_state_validation(validations, minimum_acceptation=1):
     accepted = list()
     refused = list()
     forced = list()
@@ -17,11 +17,12 @@ def get_state_validation(validations, minimum_acceptances=1):
         return "forced", forced
     if len(refused) > 0:
         return "refused", refused
-    if len(accepted) >= minimum_acceptances:
+    if len(accepted) >= minimum_acceptation:
         return "accepted", accepted
     return "pending", accepted
 
 def set_status(baseurl, project, pr_number):
+    return True
     def general_message(admins, accepted=True):
         names = ""
         if len(admins) == 0:
@@ -35,7 +36,7 @@ def set_status(baseurl, project, pr_number):
         return names + " has " + action + " the Pull Request."
 
     pr = project["pr"][pr_number]
-    state_validation, admins = get_state_validation(pr["validations"])
+    state_validation, admins = get_state_validation(pr["validations"], project["minimum_acceptation"])
 
     if state_validation == "forced":
         state = "success"

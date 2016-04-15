@@ -22,10 +22,15 @@ def configs():
             db["baseurl"] = baseurl[:-1] if baseurl.endswith("/") else baseurl
             db["admins"] = request.form["administrators"].splitlines()
 
-    elif "save_project" in request.form and "project" in request.form and "administrators" in request.form:
+    elif "save_project" in request.form and "project" in request.form and "administrators" in request.form and "minimum_acceptation" in request.form:
+        try:
+            minimum_acceptation = int(request.form["minimum_acceptation"])
+        except:
+            minimum_acceptation = 2
         with database() as db:
             projects = db["projects"]
             projects[request.form["project"]]["administrators"] = request.form["administrators"].splitlines()
+            projects[request.form["project"]]["minimum_acceptation"] = minimum_acceptation
             db["projects"] = projects
 
     elif "update_project_oauth" in request.form and "project" in request.form:

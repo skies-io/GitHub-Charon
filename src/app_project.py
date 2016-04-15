@@ -9,8 +9,8 @@ from page_tools import get_general_variables, generate_error
 app_project = Blueprint('app_project', __name__)
 
 
-def get_view_info_pr(project_name, pull_request):
-    state_validation, _ = get_state_validation(pull_request["validations"])
+def get_view_info_pr(project, pull_request):
+    state_validation, _ = get_state_validation(pull_request["validations"], project["minimum_acceptation"])
     user_validation = None
     if "login" in session and session["login"] in pull_request["validations"]:
         user_validation = pull_request["validations"][session["login"]]["action"]
@@ -19,7 +19,7 @@ def get_view_info_pr(project_name, pull_request):
         "state": pull_request["state"],
         "title": pull_request["title"],
         "github_link": pull_request["link"],
-        "link": "/?" + urlencode({"project": project_name, "pr": pull_request["number"]}),
+        "link": "/?" + urlencode({"project": project["name"], "pr": pull_request["number"]}),
         "state_validation": state_validation,
         "user_validation": user_validation,
         "validations": pull_request["validations"]
@@ -52,7 +52,7 @@ def home():
     if "pr" not in request.args:
         pr = list()
         for pr_number in project["pr"]:
-            pr.append(get_view_info_pr(project["name"], project["pr"][pr_number]))
+            pr.append(get_view_info_pr(project, project["pr"][pr_number]))
         view["pr"] = sorted(pr, key=lambda elem: elem["number"], reverse=True)
 
         return render_template("project.html", **view)
@@ -87,7 +87,8 @@ def home():
                 view["error_validation"] = "Impossible to set status on GitHub."
 
     view["title"] += ", Pull Request #" + pr_number
-    view["pr"] = get_view_info_pr(project["name"], project["pr"][pr_number])
+    view["pr"] = get_view_info_pr(project, project["pr"][pr_number])
     view["project_admins"] = project["administrators"]
+    view["project_minimum_acceptation"] = project["minimum_acceptation"]
 
     return render_template("pull_request.html", **view)

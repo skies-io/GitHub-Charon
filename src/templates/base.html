@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="/static/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap-theme.min.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic" rel="stylesheet">
-    <link rel="stylesheet" href="/static/styles.css" />
+    <link rel="stylesheet" href="/static/styles.css?rev=2" />
     <script src="/static/jquery-1.12.0.min.js"></script>
     <script src="/static/bootstrap.min.js"></script>
 
@@ -23,12 +23,12 @@
 <body>
     <div class="container">
         <header class="row">
-            <div class="col-md-3 text-center">
+            <div class="col-md-2 text-center">
                 <br/><br/>
                 <img src="/static/favicon.png"/><br/>
                 <small><a href="https://github.com/skies-io/GitHub-Charon">skies-io/GitHub-Charon</a></small>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-10">
                 <h4><small>GitHub Charon - Pull Request Validation Tool</small></h4>
                 <h2>{{ title }}</h2>
                 <hr/>
@@ -37,7 +37,7 @@
 
         <div class="row">
 
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <h5><small>General</small></h5>
                 <ul class="nav nav-pills nav-stacked">
                     <li><a href="/">Home</a></li>
@@ -51,7 +51,7 @@
                 </ul>
             </div>
 
-            <div class="col-md-9">
+            <div class="col-md-10">
                 {% block content %}{% endblock %}
             </div>
 

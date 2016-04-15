@@ -5,3 +5,4 @@ header.row { margin-top: 20px; margin-bottom: 20px; }
 p { padding: 15px; }
 .h1, .h2, .h3, h1, h2, h3 { margin-top: 30px; margin-bottom: 20px; }
 .table tbody > tr > td { vertical-align: middle; }
+.nav > li > a { padding: 10px 0px 10px 10px; font-size: 90%; }

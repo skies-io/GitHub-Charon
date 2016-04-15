@@ -22,7 +22,6 @@ def get_state_validation(validations, minimum_acceptation=1):
     return "pending", accepted
 
 def set_status(baseurl, project, pr_number):
-    return True
     def general_message(admins, accepted=True):
         names = ""
         if len(admins) == 0:
